@@ -1,0 +1,11 @@
+{
+    "name": "EntityAttribute",
+    "alias": "entityattribute",
+    "description": "",
+    "keywords": [],
+    "priority": 0,
+    "providers": [
+        "Modules\\EntityAttribute\\Providers\\EntityAttributeServiceProvider"
+    ],
+    "files": []
+}

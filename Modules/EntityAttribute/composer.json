@@ -1,0 +1,30 @@
+{
+    "name": "nwidart/entityattribute",
+    "description": "",
+    "authors": [
+        {
+            "name": "Nicolas Widart",
+            "email": "n.widart@gmail.com"
+        }
+    ],
+    "extra": {
+        "laravel": {
+            "providers": [],
+            "aliases": {
+
+            }
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Modules\\EntityAttribute\\": "app/",
+            "Modules\\EntityAttribute\\Database\\Factories\\": "database/factories/",
+            "Modules\\EntityAttribute\\Database\\Seeders\\": "database/seeders/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Modules\\EntityAttribute\\Tests\\": "tests/"
+        }
+    }
+}

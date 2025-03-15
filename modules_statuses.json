@@ -1,0 +1,6 @@
+{
+    "User": true,
+    "Project": true,
+    "Timesheet": true,
+    "EntityAttribute": true
+}
