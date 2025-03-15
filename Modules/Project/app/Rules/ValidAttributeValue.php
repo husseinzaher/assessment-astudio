@@ -4,6 +4,7 @@ namespace Modules\Project\Rules;
 
 use Carbon\Carbon;
 use Closure;
+use Exception;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Modules\EntityAttribute\Enums\AttributeType;
 use Modules\EntityAttribute\Models\Attribute;
@@ -40,13 +41,19 @@ class ValidAttributeValue implements ValidationRule
         match ($attribute->type) {
             AttributeType::Text => is_string($value) ? true : $fail("The value for {$attribute->name} must be a string."),
             AttributeType::Number => is_numeric($value) ? true : $fail("The value for {$attribute->name} must be a number."),
-            AttributeType::Date => $this->isValidDateFormat($value) ? true : $fail("The value for {$attribute->name} must be a date."),
+            AttributeType::Date => $this->isValidDateFormat($value) ? true : $fail("The value for {$attribute->name} must be a date Y-m-d."),
             default => true
         };
     }
 
     function isValidDateFormat($date, $format = 'Y-m-d'): bool
     {
-        return Carbon::createFromFormat($format, $date) !== false;
+
+        try {
+            $parsedDate = Carbon::createFromFormat($format, $date);
+            return $parsedDate && $parsedDate->format($format) === $date;
+        } catch (Exception $e) {
+            return false;
+        }
     }
 }

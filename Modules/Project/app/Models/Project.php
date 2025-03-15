@@ -15,6 +15,7 @@ use Modules\Project\Database\Factories\ProjectFactory;
 use Modules\Project\Enums\ProjectStatus;
 use Modules\Timesheet\Models\Timesheet;
 use Modules\User\Models\User;
+use function PHPUnit\Framework\isFalse;
 
 /**
  * @property int $id
@@ -32,7 +33,7 @@ class Project extends BaseModel
     use HasFactory;
 
     const EQUAL = 'equal';
-    const GRATER_THAN = 'grater_than';
+    const GREATER_THAN = 'greater_than';
     const LOWER_THAN = 'lower_than';
     const LIKE = 'like';
 
@@ -84,6 +85,9 @@ class Project extends BaseModel
 
                 $query->when(!in_array($column, $this->fillable), function (Builder $query) use ($value, $clause, $column) {
                     $query->whereHas('attributeValues', function (Builder $query) use ($clause, $column, $value) {
+                        $query->whereHas('attribute', function ($attrQuery) use ($column) {
+                            $attrQuery->where('name', $column);
+                        });
                         $this->applyClause($query, 'value', $clause, $value);
                     });
                 });
@@ -96,7 +100,7 @@ class Project extends BaseModel
     protected function applyClause(Builder $query, string $column, string $clause, string $value): Builder
     {
         $operator = match ($clause) {
-            static::GRATER_THAN => '>',
+            static::GREATER_THAN => '>',
             static::LOWER_THAN => '<',
             static::LIKE => 'like',
             default => '='
@@ -106,6 +110,25 @@ class Project extends BaseModel
             $value = "%{$value}%";
         }
 
-        return $query->where($column, $operator, $value);
+        $isValidDateFormat = $this->isValidDateFormat($value);
+
+        return $query->when($isValidDateFormat, function (Builder $query) use ($column, $operator, $value) {
+            $query->whereDate($column, $operator, $value);
+        })->when(!$isValidDateFormat, function (Builder $query) use ($column, $operator, $value) {
+            $query->where($column, $operator, $value);
+        });
     }
+
+    function isValidDateFormat($date, $format = 'Y-m-d'): bool
+    {
+
+        try {
+            $parsedDate = \Carbon\Carbon::createFromFormat($format, $date);
+            return $parsedDate && $parsedDate->format($format) === $date;
+        } catch (\Exception $e) {
+            return false;
+
+        }
+    }
+
 }
