@@ -14,12 +14,18 @@ class TimesheetService
     public function create(array $data): Timesheet
     {
 
-        return Timesheet::create($data);
+        return Timesheet::create([
+            'user_id' => auth()->user()->id,
+            ...$data
+        ]);
     }
 
     public function update(Timesheet $timesheet, array $data): Timesheet
     {
-        $timesheet->update($data);
+        $timesheet->update([
+            'user_id' => auth()->user()->id,
+            ...$data
+        ]);
 
         return $timesheet;
     }

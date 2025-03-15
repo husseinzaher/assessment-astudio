@@ -16,7 +16,6 @@ class UpdateTimesheet extends FormRequest
             'task_name' => 'nullable|string|max:255',
             'date' => 'nullable|date',
             'hours' => 'nullable|numeric|decimal:0,2|min:0|max:500',
-            'user_id' => 'nullable|exists:users,id',
             'project_id' => 'nullable|exists:projects,id',
         ];
     }

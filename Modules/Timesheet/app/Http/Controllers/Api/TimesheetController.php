@@ -11,7 +11,9 @@ use Modules\Timesheet\Services\TimesheetService;
 
 class TimesheetController extends ApiController
 {
-    public function __construct(private readonly TimesheetService $timesheetService) {}
+    public function __construct(private readonly TimesheetService $timesheetService)
+    {
+    }
 
     /**
      * Display a listing of the resource.

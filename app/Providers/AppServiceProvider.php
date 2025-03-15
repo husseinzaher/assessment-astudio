@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use Illuminate\Database\Eloquent\Relations\Relation;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Validation\Rules\Password;
 use Laravel\Passport\Passport;
@@ -27,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
         Passport::hashClientSecrets();
         $this->morphMap();
         $this->setDefaultPasswordRules();
+
+
     }
 
     protected function setDefaultPasswordRules(): void

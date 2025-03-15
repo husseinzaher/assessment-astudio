@@ -16,7 +16,6 @@ class CreateTimesheet extends FormRequest
             'task_name' => 'required|string|max:255',
             'date' => 'required|date',
             'hours' => 'required|numeric|min:0|max:500|decimal:0,2',
-            'user_id' => 'required|exists:users,id',
             'project_id' => 'required|exists:projects,id',
         ];
     }
